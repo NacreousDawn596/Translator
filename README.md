@@ -1,6 +1,6 @@
-# Translator
+# translator
 
-A new Flutter project.
+A new android app to have some funny translations lol.
 
 ## Getting Started
 

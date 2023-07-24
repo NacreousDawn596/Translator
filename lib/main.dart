@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,21 +13,21 @@ class MyApp extends StatelessWidget {
       title: 'Funny Translator LOL',
       theme: ThemeData(
         brightness: Brightness.dark, // Set the theme to dark
-        primaryColor: Color(0xFF000000), // Background color
-        scaffoldBackgroundColor: Color(0xFF000000),
-        canvasColor: Color(0xFF1D1D1F), // Surface color
-        textTheme: TextTheme(
+        primaryColor: const Color(0xFF000000), // Background color
+        scaffoldBackgroundColor: const Color(0xFF000000),
+        canvasColor: const Color(0xFF28282B), // Surface color
+        textTheme: const TextTheme(
           bodyText1: TextStyle(color: Color(0xFFF5F5F7)), // Set text color to off-white
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            primary: Color(0xFF1D1D1F), // Set button background color to dark gray
+            backgroundColor: const Color(0xFF282C35), // Set button background color to dark gray
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
-          labelStyle: TextStyle(color: Color(0xFFF5F5F7)), // Set label color to off-white
+          labelStyle: const TextStyle(color: Color(0xFFF5F5F7)), // Set label color to off-white
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFFF5F5F7)), // Set border color to off-white
+            borderSide: const BorderSide(color: Color(0xFFF5F5F7)), // Set border color to off-white
             borderRadius: BorderRadius.circular(8.0),
           ),
         ),
@@ -82,16 +82,17 @@ class _DataFetchingScreenState extends State<DataFetchingScreen> {
     }
   }
 
-  Future<http.Response> _translateText(String text, String method) {
-    String apiUrl = "https://api.funtranslations.com/translate/$method?text=$text";
-    return http.get(Uri.parse(apiUrl));
+  Future<Response> _translateText(String text, String method) async {
+    String apiUrl = "https://api.funtranslations.com/translate/$method?text=${Uri.encodeQueryComponent(text)}";
+    final response = await get(Uri.parse(apiUrl));
+    return response;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Funny Translator LOL'),
+        title: const Text('Funny Translator LOL'),
       ),
       body: Center( // Center the content vertically and horizontally
         child: Column(
@@ -102,7 +103,7 @@ class _DataFetchingScreenState extends State<DataFetchingScreen> {
               padding: const EdgeInsets.all(16.0),
               child: TextField(
                 controller: _textController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Enter Text',
                   border: OutlineInputBorder(),
                 ),
@@ -113,6 +114,7 @@ class _DataFetchingScreenState extends State<DataFetchingScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(),
+                  color: const Color(0xFF1A1A1A),
                   borderRadius: BorderRadius.circular(4.0),
                 ),
                 child: DropdownButtonHideUnderline(
@@ -130,7 +132,7 @@ class _DataFetchingScreenState extends State<DataFetchingScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             method,
-                            style: TextStyle(fontSize: 14),
+                            style: const TextStyle(fontSize: 14),
                           ),
                         ),
                       );
@@ -141,14 +143,27 @@ class _DataFetchingScreenState extends State<DataFetchingScreen> {
             ),
             ElevatedButton(
               onPressed: _fetchData,
-              child: Text('Translate!!'),
+              child: const Text('Translate!!'),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  _responseData,
-                  style: TextStyle(fontSize: 16),
+              child: Center(
+                child: FractionallySizedBox(
+                  alignment: Alignment.center,
+                  heightFactor: 0.7,
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          _responseData,
+                          style: const TextStyle(fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
